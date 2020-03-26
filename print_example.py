@@ -1,4 +1,4 @@
-from torch_neural import Net, train_net, imshow, make_prediction, test_net
+from functions import Net, train_net, imshow, make_prediction, test_net
 from data_load import data_load
 import torchvision
 import torch
