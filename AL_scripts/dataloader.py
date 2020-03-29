@@ -3,6 +3,7 @@ import torch
 from torchvision import datasets, transforms
 from torch.utils.data import Dataset
 from PIL import Image
+from DATA_kaggle import *
 
 def get_dataset(name):
     """
