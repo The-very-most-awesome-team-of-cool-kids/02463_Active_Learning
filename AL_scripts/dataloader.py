@@ -3,7 +3,7 @@ import torch
 from torchvision import datasets, transforms
 from torch.utils.data import Dataset
 from PIL import Image
-from DATA_kaggle import *
+# from DATA_kaggle import *
 
 def get_dataset(name):
     """
@@ -42,7 +42,7 @@ def get_args(name):
                 'transform': transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]),
                 'loader_tr_args':{'batch_size': 64, 'num_workers': 1},
                 'loader_te_args':{'batch_size': 1000, 'num_workers': 1},
-                'optimizer_args':{'lr': 0.009}}
+                'optimizer_args':{'lr': 0.0009}}
 
 
 

@@ -10,10 +10,11 @@
 
 # imshow(img)
 
+i
 
-import pandas as pd
-import numpy as np
+def test(hej, nej, hallo):
+    r = hej+nej
+    print(list(*args))
+    return hallo % r
 
-metadata = pd.read_csv("metadata.csv")
-
-print(np.unique(metadata["finding"], return_counts=True))
+test(1,2, 100)

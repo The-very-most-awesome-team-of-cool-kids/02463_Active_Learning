@@ -83,6 +83,8 @@ class strategy:
                 prob = F.softmax(out, dim = 1)
                 probs[ids] = prob.cpu()
 
+        return probs
+
 
 
 class RandomSampling(strategy):
@@ -91,3 +93,46 @@ class RandomSampling(strategy):
 
     def query(self, n):
         return np.random.choice(np.where(self.ids_labeled == 0)[0], n)
+
+    def get_name(self):
+        # return "RandomSampling"
+        return type(self).__name__
+
+
+class UncertaintySampling(strategy):
+    def __init__(self, X, Y, ids_labeled, model, handler, args):
+        self.uncertainty_measure = "Entropy"
+        super(UncertaintySampling, self).__init__(X, Y, ids_labeled, model, handler, args)
+
+    def set_uncertainty_measure(self, measure):
+        """
+        measure: the wanted uncertainty measure
+        """
+        self.uncertainty_measure = measure
+
+    def get_name(self):
+        return type(self).__name__
+
+
+    def query(self, n):
+        ids_unlabeled = np.arange(self.n_pool)[~self.ids_labeled]
+        probs = self.predict_prob(self.X[ids_unlabeled], self.Y[ids_unlabeled])
+        log_probs = torch.log(probs)
+        if self.uncertainty_measure.lower() == "entropy":
+            uncertainties = (-probs*log_probs).sum(1)
+        
+        return ids_unlabeled[uncertainties.sort(descending = True)[1][:n]]
+
+class MarginSampling(strategy):
+    def __init__(self, X, Y, ids_labeled, model, handler, args):
+        super(MarginSampling, self).__init__(X, Y, ids_labeled, model, handler, args)
+
+    def query(self, n):
+        ids_unlabeled = np.arange(self.n_pool)[~self.ids_labeled]
+        probs = self.predict_prob(self.X[ids_unlabeled], self.Y[ids_unlabeled])
+        probs_sorted, ids = probs.sort(descending=True)
+        margin = probs_sorted[:, 0] - probs_sorted[:,1]
+        return ids_unlabeled[margin.sort()[1][:n]]
+
+    def get_name(self):
+        return type(self).__name__
