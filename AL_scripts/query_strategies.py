@@ -136,3 +136,32 @@ class MarginSampling(strategy):
 
     def get_name(self):
         return type(self).__name__
+
+class QBCSampling(strategy):
+    def __init__(self, X, Y, ids_labeled, model, handler, args, n_committees = 10):
+        self.n_committees = n_committees
+        super(QBCSampling, self).__init__(X, Y, ids_labeled, model, handler, args)
+    
+    def query(self, n):
+        ids_unlabeled = np.arange(self.n_pool)[~self.ids_labeled]
+        preds = torch.zeros([len(ids_unlabeled), self.n_committees])
+
+        # predict with different committees via bootstrapping
+        for i in range(self.n_committees):
+            strategy.update(self, ids_labeled = np.random.choice(self.ids_labeled, size = len(self.ids_labeled), replace = True))
+            strategy.train(self)
+            preds[:,i] = strategy.predict(self, self.X[ids_unlabeled], self.Y[ids_unlabeled])
+        
+        # use margin to find least confident
+        classes = len(np.unique(self.Y))
+        preds_prob = torch.tensor([np.histogram(preds[i, :], bins = np.arange(classes+1))[0]/classes for i in range(len(ids_unlabeled))])
+        preds_margin, _ = preds_prob.sort(descending=True)
+        preds_margin = preds_margin[:, 0] - preds_margin[:, 1]
+
+        # set the indices with labels back to original
+        strategy.update(self, ids_labeled= self.ids_labeled)
+        return ids_unlabeled[preds_margin.sort()[1][:n]]
+        
+
+    def get_name(self):
+        return type(self).__name__

@@ -40,7 +40,7 @@ def get_args(name):
     if name.upper() == "CIFAR10":
         return {'n_epoch': 1,
                 'transform': transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]),
-                'loader_tr_args':{'batch_size': 64, 'num_workers': 1},
+                'loader_tr_args':{'batch_size': 4, 'num_workers': 1},
                 'loader_te_args':{'batch_size': 1000, 'num_workers': 1},
                 'optimizer_args':{'lr': 0.0009}}
 
