@@ -7,16 +7,18 @@ Created on Tue Mar 31 21:24:14 2020
 import numpy as np
 #from torchvision import datasets
 
-
+import glob
 from matplotlib import image
 from matplotlib import pyplot
 
 from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
 from PIL import Image, ImageOps
 
-#%%
+#%% 
 def zeropad(im_pth, N):
-    #rturns zerropadded image
+    """
+    im_pth: image path 
+    """
     im = Image.open(im_pth)
     old_size = im.size  
     
@@ -37,7 +39,7 @@ def zeropad(im_pth, N):
     return data
 
     
-def get_Xray(path, cl, N):    
+def Dataload(path, cl, N):    
     #Normal images    
     all_files = glob.glob(path + cl + "/*.thumbnail")
     X = np.zeros((len(all_files),N,N))
@@ -57,8 +59,8 @@ def get_Xray(path, cl, N):
 
 def concat_(path,cl0="NORMAL",cl1="PNEUMONIA",N=500):
     
-    X0, y0 = get_Xray(path, cl0, N)
-    X1, y1 = get_Xray(path, cl1, N)
+    X0, y0 = Dataload(path, cl0, N)
+    X1, y1 = Dataload(path, cl1, N)
     
     X = np.concatenate((X0,X1),axis=0)   
     y = np.concatenate((y0,y1))

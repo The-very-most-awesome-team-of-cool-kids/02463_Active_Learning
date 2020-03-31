@@ -68,10 +68,10 @@ path_test = r'./Egne_filer/Test/chest_xray/test/'
 path_val = r'./Egne_filer/Val/chest_xray/val/'  
 resize(path_train, "NORMAL")
 resize(path_train, "PNEUMONIA")
-resize(path_train, "NORMAL")
-resize(path_train, "PNEUMONIA")
-resize(path_train, "NORMAL")
-resize(path_train, "PNEUMONIA")
+resize(path_test, "NORMAL")
+resize(path_test, "PNEUMONIA")
+resize(path_val, "NORMAL")
+resize(path_val, "PNEUMONIA")
     
 
 
