@@ -9,6 +9,8 @@ import torch
 def get_model(name):
     if name.upper() == "CIFAR10":
         return Net
+    if name.upper() == "XRAY":
+        return Net2
 
 class Net(nn.Module):
     def __init__(self):
@@ -33,7 +35,7 @@ class Net(nn.Module):
         return x
 
 
-class Net(nn.Module):
+class Net2(nn.Module):
     def __init__(self):
         super(Net, self).__init__()
         self.device =  torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -42,7 +44,7 @@ class Net(nn.Module):
         self.conv2 = nn.Conv2d(6, 16, 5).to(self.device)
         self.fc1 = nn.Linear(16 * 5 * 5, 120).to(self.device)
         self.fc2 = nn.Linear(120, 84).to(self.device)
-        self.fc3 = nn.Linear(84, 10).to(self.device)
+        self.fc3 = nn.Linear(84, 2).to(self.device)
 
     def forward(self, x):
         x = x.to(self.device)
