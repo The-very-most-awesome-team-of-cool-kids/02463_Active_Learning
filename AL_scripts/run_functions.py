@@ -49,6 +49,7 @@ def run_AL(n_train, n_query, n_rounds, dataset, strat, seed = 1):
     # X_tr = X_tr[:10000]
     # Y_tr = Y_tr[:10000]
 
+    # print("lengths:", len(X_tr), len(Y_tr), len(X_te), len(Y_te))
 
     # inialize experiment
     n_pool = len(Y_tr)
@@ -86,7 +87,7 @@ def run_AL(n_train, n_query, n_rounds, dataset, strat, seed = 1):
 
     t0 = time.time()
     acc = train_rounds(X_te, Y_te, n_rounds, n_query, n_train, ids_labeled, strategy, seed)
-    print("Done!")
+    print(f"Done with training for {strat} sampling!")
     print(f"Time for training: {time.time()-t0}")
     # save results
     with open("AL_scripts/results/"+dataset+ "_" +strategy.get_name()+ "_accuracies" +".pkl", "wb") as file:

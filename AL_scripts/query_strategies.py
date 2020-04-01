@@ -34,7 +34,7 @@ class strategy:
             optimizer.zero_grad()
             #print("shape of output: ",np.shape(self.clf(x)), self.clf(x))
             # out, e1 = self.clf(x)
-            out = self.clf(x)
+            out = self.clf(x.float())
             # loss = nn.CrossEntropyLoss(out, y)
             # print(y, type(y))
             loss = F.cross_entropy(out, y)
@@ -43,7 +43,7 @@ class strategy:
 
     def train(self):
         n_epoch = self.args['n_epoch']
-        self.clf = self.model().to(self.device)
+        self.clf = self.model().to(self.device).float()
         optimizer = optim.Adam(self.clf.parameters(), **self.args['optimizer_args'])
         # print(self.X[self.ids_labeled], type(self.X[self.ids_labeled]))
         train_ids = np.arange(self.n_pool)[self.ids_labeled]

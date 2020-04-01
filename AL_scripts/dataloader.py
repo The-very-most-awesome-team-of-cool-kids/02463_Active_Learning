@@ -4,6 +4,7 @@ from torchvision import datasets, transforms
 from torch.utils.data import Dataset
 from PIL import Image
 from LOAD_XRAY import concat_, zeropad, Dataload as concat_, zeropad, Dataload
+import os
 
 def get_dataset(name):
     """
@@ -29,6 +30,9 @@ def get_dataset(name):
         X_te = data_te.test_data
         Y_te = torch.from_numpy(np.array(data_te.test_labels))
     elif name.upper() == "XRAY":
+        if not os.path.exists("Egne_filer/Train/chest_xray/"):
+            print("Downloading data set from Kaggle")
+            import DATA_kaggle
         path_train ="Egne_filer/Train/chest_xray/train/"
         path_test = "Egne_filer/Test/chest_xray/test/"
         X0_tr, y0_tr = Dataload(path_train, "NORMAL", 125)
@@ -53,7 +57,7 @@ def get_handler(name):
     if name.upper() == "CIFAR10":
         return handler1
     elif name.upper() == "XRAY":
-        return handler1
+        return handler2
         
 
 def get_args(name):
@@ -64,13 +68,13 @@ def get_args(name):
                 'loader_te_args':{'batch_size': 1000, 'num_workers': 1},
                 'optimizer_args':{'lr': 0.0009}}
     if name.upper() == "XRAY":
-        return {'n_epoch': 1,
+        return {'n_epoch': 4,
                 'transform': transforms.Compose([transforms.ToTensor(), 
-                                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]), 
-                                transforms.Resize(size=256),
-                                transforms.CenterCrop(size=224)]),
-                'loader_tr_args':{'batch_size': 4, 'num_workers': 1},
-                'loader_te_args':{'batch_size': 1000, 'num_workers': 1},
+                                transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])]), 
+                                # transforms.Resize(size=256),
+                                # transforms.CenterCrop(size=224)]),
+                'loader_tr_args':{'batch_size': 64, 'num_workers': 1},
+                'loader_te_args':{'batch_size': 78, 'num_workers': 1},
                 'optimizer_args':{'lr': 0.0009}}
 
 
@@ -91,5 +95,25 @@ class handler1(Dataset):
     def __len__(self):
         return len(self.X)
 
-import os
-print(os.getcwd())
+class handler2(Dataset):
+    def __init__(self, X, Y, transform = None):
+        self.X = X
+        self.Y = Y
+        self.transform = transform
+
+    def __getitem__(self, index):
+        x, y = self.X[index], self.Y[index]
+        if self.transform is not None:
+            h, w = np.shape(x)
+            # print(type(x), np.shape(x))
+            x = np.reshape(x, (h, w, 1))
+            # print(type(x), np.shape(x))
+            # # x = torch.FloatTensor(np.shape(x))
+            # # x = transforms.functional.to_pil_image(x)
+            # # x = Image.fromarray((x * 255).astype(np.uint8))
+            # x = Image.fromarray(x)
+            x = self.transform(x)
+            return x, y, index
+
+    def __len__(self):
+        return len(self.X)
