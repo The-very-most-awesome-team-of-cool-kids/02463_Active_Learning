@@ -6,12 +6,12 @@ from PIL import Image
 from LOAD_XRAY import concat_ as concat_
 
 def get_dataset(name):
-    if name == 'CIFFAR10':
-        return get_CIFFAR10()
-    elif name == 'Xray':
+    if name.upper() == 'CIFAR10':
+        return get_CIFAR10()
+    elif name.upper() == 'XRAY':
         return get_Xray()
 
-def get_CIFFAR10():
+def get_CIFAR10():
     """
     Gets data set:
     --------------------------------------

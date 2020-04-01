@@ -28,16 +28,32 @@ def get_dataset(name):
         Y_tr = torch.from_numpy(np.array(data_tr.train_labels))
         X_te = data_te.test_data
         Y_te = torch.from_numpy(np.array(data_te.test_labels))
-        return X_tr, Y_tr, X_te, Y_te
+    elif name.upper() == "XRAY":
+        path_train = r'./Egne_filer/Train/chest_xray/train/' 
+        path_test = r'./Egne_filer/Test/chest_xray/test/'
+        X_tr, y_tr = concat_(path_train)
+        X_te, y_te = concat_(path_test)
+        Y_tr = torch.from_numpy(y_tr)
+        Y_te = torch.from_numpy(y_te)
+    
+    return X_tr, Y_tr, X_te, Y_te
 
 
 def get_handler(name):
     if name.upper() == "CIFAR10":
         return handler1
+    elif name.upper() == "XRAY":
+        return handler1
         
 
 def get_args(name):
     if name.upper() == "CIFAR10":
+        return {'n_epoch': 1,
+                'transform': transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]),
+                'loader_tr_args':{'batch_size': 4, 'num_workers': 1},
+                'loader_te_args':{'batch_size': 1000, 'num_workers': 1},
+                'optimizer_args':{'lr': 0.0009}}
+    if name.upper() == "XRAY":
         return {'n_epoch': 1,
                 'transform': transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))]),
                 'loader_tr_args':{'batch_size': 4, 'num_workers': 1},
