@@ -3,7 +3,7 @@ import torch
 from torchvision import datasets, transforms
 from torch.utils.data import Dataset
 from PIL import Image
-from LOAD_XRAY import concat_ as concat_
+from LOAD_XRAY import concat_, zeropad, Dataload as concat_, zeropad, Dataload
 
 def get_dataset(name):
     if name == 'CIFFAR10':
@@ -39,12 +39,22 @@ def get_CIFFAR10():
     
    # elif name.upper() == "Xray":
 def get_Xray():     
-    path_train = r'./Egne_filer/Train/chest_xray/train/' 
-    path_test = r'./Egne_filer/Test/chest_xray/test/'
-    X_tr, y_tr = concat_(path_train)
-    X_te, y_te = concat_(path_test)
-    Y_tr = torch.from_numpy(y_tr)
-    Y_te = torch.from_numpy(y_te)
+    path_train ="/Users/mat05/OneDrive - Danmarks Tekniske Universitet/02463_Active_Learning/AL_scripts/Egne_filer/Train/chest_xray/train/"
+    path_test = "/Users/mat05/OneDrive - Danmarks Tekniske Universitet/02463_Active_Learning/AL_scripts/Egne_filer/Test/chest_xray/test/"
+    X0_tr, y0_tr = Dataload(path_train, "NORMAL", 125)
+    X1_tr, y1_tr = Dataload(path_train, "PNEUMONIA", 125)
+    
+    X_tr = np.concatenate((X0_tr,X1_tr),axis=0)   
+    Y_tr = np.concatenate((y0_tr,y1_tr))
+
+    X0_te, y0_te = Dataload(path_test, "NORMAL", 125)
+    X1_te, y1_te = Dataload(path_test, "PNEUMONIA", 125)
+    
+    X_te = np.concatenate((X0_te,X1_te),axis=0)   
+    Y_te = np.concatenate((y0_te,y1_te))
+    
+    Y_tr = torch.from_numpy(Y_tr)
+    Y_te = torch.from_numpy(Y_te)
     
     return X_tr, Y_tr, X_te, Y_te
 

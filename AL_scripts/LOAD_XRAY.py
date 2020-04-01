@@ -11,7 +11,7 @@ import glob
 from matplotlib import image
 from matplotlib import pyplot
 
-from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
+#from keras.preprocessing.image import ImageDataGenerator, array_to_img, img_to_array, load_img
 from PIL import Image, ImageOps
 
 #%% 
@@ -57,7 +57,7 @@ def Dataload(path, cl, N):
             X[i,:,:] = data
     return X, y
 
-def concat_(path,cl0="NORMAL",cl1="PNEUMONIA",N=500):
+def concat_(path,cl0, cl1, N):
     
     X0, y0 = Dataload(path, cl0, N)
     X1, y1 = Dataload(path, cl1, N)
@@ -65,3 +65,4 @@ def concat_(path,cl0="NORMAL",cl1="PNEUMONIA",N=500):
     X = np.concatenate((X0,X1),axis=0)   
     y = np.concatenate((y0,y1))
     return X, y
+hej1, hej2 = Dataload("/Users/mat05/OneDrive - Danmarks Tekniske Universitet/02463_Active_Learning/AL_scripts/Egne_filer/Test/chest_xray/test/", "NORMAL", 125)

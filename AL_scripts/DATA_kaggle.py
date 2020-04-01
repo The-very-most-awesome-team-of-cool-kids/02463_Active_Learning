@@ -55,7 +55,7 @@ for file in archive.namelist():
 
 # access images from folders and save in numpy  
 #Create thumbnails in order to resize
-def resize(path, cl, size = (500,500)):
+def resize(path, cl, size = (125,125)):
     for infile in glob.glob(path + cl +"/*.jpeg"):
         file, ext = os.path.splitext(infile)
         im = Image.open(infile)
