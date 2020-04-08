@@ -10,11 +10,5 @@
 
 # imshow(img)
 
-i
-
-def test(hej, nej, hallo):
-    r = hej+nej
-    print(list(*args))
-    return hallo % r
-
-test(1,2, 100)
+import torch
+print(torch.__version__)

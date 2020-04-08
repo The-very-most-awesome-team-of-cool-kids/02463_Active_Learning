@@ -6,6 +6,7 @@ from PIL import Image
 from LOAD_XRAY import concat_, zeropad, Dataload as concat_, zeropad, Dataload
 import os
 
+
 def get_dataset(name):
     """
     Gets data set:
@@ -30,19 +31,21 @@ def get_dataset(name):
         X_te = data_te.test_data
         Y_te = torch.from_numpy(np.array(data_te.test_labels))
     elif name.upper() == "XRAY":
+        size = 256
         if not os.path.exists("Egne_filer/Train/chest_xray/"):
-            print("Downloading data set from Kaggle")
-            import DATA_kaggle
+            from DATA_kaggle import data_from_kaggle
+            print("Preparing data from Kaggle...")
+            data_from_kaggle(size)
         path_train ="Egne_filer/Train/chest_xray/train/"
         path_test = "Egne_filer/Test/chest_xray/test/"
-        X0_tr, y0_tr = Dataload(path_train, "NORMAL", 125)
-        X1_tr, y1_tr = Dataload(path_train, "PNEUMONIA", 125)
+        X0_tr, y0_tr = Dataload(path_train, "NORMAL", size)
+        X1_tr, y1_tr = Dataload(path_train, "PNEUMONIA", size)
         
         X_tr = np.concatenate((X0_tr,X1_tr),axis=0)   
         Y_tr = np.concatenate((y0_tr,y1_tr))
 
-        X0_te, y0_te = Dataload(path_test, "NORMAL", 125)
-        X1_te, y1_te = Dataload(path_test, "PNEUMONIA", 125)
+        X0_te, y0_te = Dataload(path_test, "NORMAL", size)
+        X1_te, y1_te = Dataload(path_test, "PNEUMONIA", size)
         
         X_te = np.concatenate((X0_te,X1_te),axis=0)   
         Y_te = np.concatenate((y0_te,y1_te))
@@ -68,7 +71,7 @@ def get_args(name):
                 'loader_te_args':{'batch_size': 1000, 'num_workers': 1},
                 'optimizer_args':{'lr': 0.0009}}
     if name.upper() == "XRAY":
-        return {'n_epoch': 4,
+        return {'n_epoch': 1,
                 'transform': transforms.Compose([transforms.ToTensor(), 
                                 transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])]), 
                                 # transforms.Resize(size=256),

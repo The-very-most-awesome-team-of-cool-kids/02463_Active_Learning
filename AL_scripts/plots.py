@@ -3,9 +3,20 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 # load data
-files = ["AL_scripts/results/CIFAR10_RandomSampling_accuracies.pkl", "AL_scripts/results/CIFAR10_MarginSampling_accuracies.pkl"]
+# files = ["AL_scripts/Cluster/CIFAR10/CIFAR10_RandomSampling_accuracies_2.pkl", 
+# "AL_scripts/Cluster/CIFAR10/CIFAR10_UncertaintySampling_accuracies_2.pkl",
+# "AL_scripts/Cluster/CIFAR10/CIFAR10_MarginSampling_accuracies_2.pkl",
+# "AL_scripts/Cluster/CIFAR10/CIFAR10_QBCSampling_accuracies_2.pkl"]
 
-with open("AL_scripts/results/parameters", "rb") as f:
+files = ["AL_scripts/results/xray_RandomSampling_accuracies.pkl", 
+"AL_scripts/results/xray_UncertaintySampling_accuracies.pkl", 
+"AL_scripts/results/xray_MarginSampling_accuracies.pkl",
+"AL_scripts/results/Xray_QBCSampling_accuracies.pkl"]
+
+# with open("AL_scripts/Cluster/CIFAR10/CIFAR10_parameters_2.pkl", "rb") as f:
+#     parameters = pickle.load(f)
+
+with open("AL_scripts/results/parameters_Xray.pkl", "rb") as f:
     parameters = pickle.load(f)
 
 # collect results
@@ -17,7 +28,7 @@ for file in files:
 
 # make plot
 x = np.linspace(parameters["n_train"], parameters["n_train"]+ parameters["n_rounds"]*parameters["n_query"], parameters["n_rounds"]+1)
-
+# print(results, x)
 for i in range(len(results)):
     plt.plot(x, results[i]*100, linewidth = 1)
     plt.scatter(x, results[i]*100,  s = 5)
@@ -26,4 +37,4 @@ plt.title("Test accuracy for the different query strategies")
 plt.xlabel("Number of training samples")
 plt.ylabel("Accuracy [%]")
 plt.legend(parameters["strategy"], title = "Query strategy")
-plt.savefig("AL_scripts/results/CIFAR10_results")
+plt.savefig("AL_scripts/results/"+parameters["dataset"]+"_results")

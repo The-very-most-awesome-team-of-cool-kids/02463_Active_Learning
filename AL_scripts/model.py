@@ -42,7 +42,7 @@ class Net2(nn.Module):
         self.conv1 = nn.Conv2d(1, 6, 5).to(self.device)
         self.pool = nn.MaxPool2d(2, 2).to(self.device)
         self.conv2 = nn.Conv2d(6, 16, 5).to(self.device)
-        self.fc1 = nn.Linear(16*28*28, 120).to(self.device)
+        self.fc1 = nn.Linear(16*61*61, 120).to(self.device)
         self.fc2 = nn.Linear(120, 84).to(self.device)
         self.fc3 = nn.Linear(84, 2).to(self.device)
 
@@ -53,6 +53,7 @@ class Net2(nn.Module):
         x = x.to(self.device).float()
         x = self.pool(F.relu(self.conv1(x))).float()
         x = self.pool(F.relu(self.conv2(x))).float()
+        # print(x.size())
         x = x.view(-1, x.size()[1]*x.size()[2]*x.size()[3]).float()
         # x = self.input_layer(x)
         x = F.relu(self.fc1(x)).float()

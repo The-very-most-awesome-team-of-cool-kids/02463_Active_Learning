@@ -80,6 +80,8 @@ def run_AL(n_train, n_query, n_rounds, dataset, strat, seed = 1):
     print(f"Number of data points in the labeled pool: {n_train}")
     print(f"Number of data points in the unlabeled pool: {n_pool-n_train}")
     print(f"Number of data points in the test pool: {len(Y_te)}")
+    if torch.cuda.is_available():
+        print(f"The device used is {torch.cuda.get_device_name(0)}")
     print("The used data set is ", dataset)
     print(f"The seed is set to {seed}")
     print("The strategy is ", strategy.get_name())
@@ -90,5 +92,5 @@ def run_AL(n_train, n_query, n_rounds, dataset, strat, seed = 1):
     print(f"Done with training for {strat} sampling!")
     print(f"Time for training: {time.time()-t0}")
     # save results
-    with open("AL_scripts/results/"+dataset+ "_" +strategy.get_name()+ "_accuracies" +".pkl", "wb") as file:
+    with open("AL_scripts/results/"+dataset+ "_" +strategy.get_name()+ "_accuracies.pkl", "wb") as file:
         pickle.dump(acc, file)
