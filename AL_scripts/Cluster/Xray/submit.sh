@@ -28,11 +28,11 @@ module load python3/3.6.7
 ### to find torch version used: "torch.version.cuda"
 module load cuda/9.0
 
-cd ..
+cd ../..
 source active_learning-env/bin/activate
 
 ### to find version used "pkg.__version__"
 python -m pip install torch==1.0.0 torchvision==0.2.1 matplotlib==3.0.3 tensorflow==1.13.1 keras==2.2.4 kaggle
 
 ### Remember to set correct save paths in the scripts
-python run_AL.py
+python AL_scripts/run_AL.py

@@ -1,0 +1,4 @@
+Loaded module: python3/3.6.7
+Loaded module: cuda/9.0
+You are using pip version 10.0.1, however version 20.0.2 is available.
+You should consider upgrading via the 'pip install --upgrade pip' command.

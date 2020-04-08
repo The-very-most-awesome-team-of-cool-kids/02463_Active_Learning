@@ -8,15 +8,16 @@ import numpy as np
 # "AL_scripts/Cluster/CIFAR10/CIFAR10_MarginSampling_accuracies_2.pkl",
 # "AL_scripts/Cluster/CIFAR10/CIFAR10_QBCSampling_accuracies_2.pkl"]
 
-files = ["AL_scripts/results/xray_RandomSampling_accuracies.pkl", 
-"AL_scripts/results/xray_UncertaintySampling_accuracies.pkl", 
-"AL_scripts/results/xray_MarginSampling_accuracies.pkl",
-"AL_scripts/results/Xray_QBCSampling_accuracies.pkl"]
+prefix = "AL_scripts/Cluster/Xray/"
+files = [prefix + "Xray_RandomSampling_accuracies.pkl",
+prefix + "Xray_UncertaintySampling_accuracies.pkl",
+prefix + "Xray_MarginSampling_accuracies.pkl",
+prefix + "Xray_QBCSampling_accuracies.pkl"]
 
 # with open("AL_scripts/Cluster/CIFAR10/CIFAR10_parameters_2.pkl", "rb") as f:
 #     parameters = pickle.load(f)
 
-with open("AL_scripts/results/parameters_Xray.pkl", "rb") as f:
+with open(prefix + "parameters_Xray.pkl", "rb") as f:
     parameters = pickle.load(f)
 
 # collect results
@@ -37,4 +38,5 @@ plt.title("Test accuracy for the different query strategies")
 plt.xlabel("Number of training samples")
 plt.ylabel("Accuracy [%]")
 plt.legend(parameters["strategy"], title = "Query strategy")
-plt.savefig("AL_scripts/results/"+parameters["dataset"]+"_results")
+# plt.savefig("AL_scripts/results/"+parameters["dataset"]+"_results")
+plt.savefig(prefix + parameters["dataset"]+"_results.png")
